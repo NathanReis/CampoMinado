@@ -6,7 +6,7 @@ Um jogo classico recriado com Javascript para ser jogado no console.
 
 Ao abrir
 
-![vitoria](https://github.com/NathanReis/CampoMinado/blob/main/amostras/AoAbir.jpeg)
+![ao abrir](https://github.com/NathanReis/CampoMinado/blob/main/amostras/AoAbrir.jpeg)
 
 Vitória
 
