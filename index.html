@@ -11,6 +11,19 @@
     :root {
       font-size: 24px;
     }
+
+    #abrir-emulador-console {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    #fechar-emulador-console {
+      cursor: pointer;
+    }
+
+    #campo {
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -22,6 +35,8 @@
     <p>Aperte <code>F12</code> ou <code>Ctrl + Shift + I</code> para abri-lá. Caso os atalhos não funcionem, verifique qual o correto para sua máquina e navegador.</p>
 
     <p>Com a ferramenta de desenvolimento aberta, vá na aba "Console".</p>
+
+    <p>Caso esteja em um dispositivo móvel ou não queira jogar pelo conselo, <span id="abrir-emulador-console">click aqui</span> para jogar pela interface.</p>
 
     <h2>Comandos</h2>
 
@@ -44,6 +59,45 @@
       </li>
     </ul>
   </main>
+
+  <dialog id="emulador-console">
+    <span id="fechar-emulador-console">❌</span>
+
+    <pre id="campo"></pre>
+
+    <p id="emulador-log"></p>
+
+    <form>
+      <div>
+        <label for="posicao-x">X</label>
+        <input
+          id="posicao-x"
+          type="number"
+          step="1"
+          min="1"
+          max="10"
+        />
+      </div>
+
+      <div>
+        <label for="posicao-y">Y</label>
+        <input
+          id="posicao-y"
+          type="number"
+          step="1"
+          min="1"
+          max="10"
+        />
+      </div>
+
+      <div>
+        <button id="abrir-posicao" type="button">Abrir Posição</button>
+        <button id="marcar-bomba" type="button">Marcar Bomba</button>
+      </div>
+    </form>
+
+    <button id="reiniciar" type="button">Reiniciar</button>
+  </dialog>
 
   <script>
     const SETTINGS = Object.freeze({
@@ -92,11 +146,11 @@
       let posicao = [(usuarioX - 1), (usuarioY - 1)];
 
       if (!ehPosicaoNoCampo(posicao)) {
-        return console.log('Posições escolhidas não estão no campo!');
+        return exibirLog('Posições escolhidas não estão no campo!');
       }
 
       if (ehPosicaoAberta(posicao)) {
-        return console.log('Posição já aberta, escolhe uma diferente!');
+        return exibirLog('Posição já aberta, escolhe uma diferente!');
       }
 
       if (ehPosicaoDeBomba(posicao)) {
@@ -106,7 +160,7 @@
 
         exibirCampo();
 
-        return console.log('Você perdeu! 💥');
+        return exibirLog('Você perdeu! 💥');
       }
 
       posicoesAbertas.push(posicao);
@@ -166,15 +220,15 @@
       let posicao = [(usuarioX - 1), (usuarioY - 1)];
 
       if (!ehPosicaoNoCampo(posicao)) {
-        return console.log('Posições escolhidas não estão no campo!');
+        return exibirLog('Posições escolhidas não estão no campo!');
       }
 
       if (ehPosicaoAberta(posicao)) {
-        return console.log('Posição já aberta, escolhe uma diferente!');
+        return exibirLog('Posição já aberta, escolhe uma diferente!');
       }
 
       if (ehPosicaoDeBandeira(posicao)) {
-        return console.log('Posição já marcada, escolhe uma diferente!');
+        return exibirLog('Posição já marcada, escolhe uma diferente!');
       }
 
       posicoesBandeiras.push(posicao);
@@ -185,7 +239,7 @@
 
     function verificarVitoria() {
       if (ehJogoFinalizado) {
-        return console.log(`Você ${ehVitoria ? 'venceu! 😄' : 'perdeu! 💥'}`)
+        return exibirLog(`Você ${ehVitoria ? 'venceu! 😄' : 'perdeu! 💥'}`)
       }
 
       let totalDePosicoes = SETTINGS.campo.tamanhoX * SETTINGS.campo.tamanhoY;
@@ -197,8 +251,13 @@
         ehJogoFinalizado = true;
         ehVitoria = true;
 
-        console.log('Você venceu! 😄');
+        exibirLog('Você venceu! 😄');
       }
+    }
+
+    function exibirLog(mensagem) {
+      console.log(mensagem);
+      document.querySelector('#emulador-log').innerHTML = mensagem;
     }
 
     function reiniciar() {
@@ -304,7 +363,9 @@
         desenhoCampo += '\n\r';
       }
 
-      console.log(desenhoCampo)
+      console.log(desenhoCampo);
+      document.querySelector('#campo').innerHTML = desenhoCampo;
+      document.querySelector('#emulador-log').innerHTML = '';
     }
 
     function sortearPosicaoNoCampo() {
@@ -360,7 +421,44 @@
       return y >= 0 && y < SETTINGS.campo.tamanhoY;
     }
 
-    inicializar();
+    document.addEventListener('DOMContentLoaded', function(e) {
+      inicializar();
+
+      document.querySelector('#abrir-emulador-console').addEventListener('click', () => {
+        document.querySelector('#emulador-console').showModal();
+      });
+
+      document.querySelector('#fechar-emulador-console').addEventListener('click', () => {
+        document.querySelector('#emulador-console').close();
+      });
+
+      document.querySelector('#abrir-posicao').addEventListener('click', () => {
+        let usuarioX = document.querySelector('#posicao-x').value;
+        let usuarioY = document.querySelector('#posicao-y').value;
+
+        abrirPosicao(usuarioX, usuarioY);
+
+        document.querySelector('#posicao-x').value = '';
+        document.querySelector('#posicao-y').value = '';
+      });
+
+      document.querySelector('#marcar-bomba').addEventListener('click', () => {
+        let usuarioX = document.querySelector('#posicao-x').value;
+        let usuarioY = document.querySelector('#posicao-y').value;
+
+        marcarComBandeira(usuarioX, usuarioY);
+
+        document.querySelector('#posicao-x').value = '';
+        document.querySelector('#posicao-y').value = '';
+      });
+
+      document.querySelector('#reiniciar').addEventListener('click', () => {
+        reiniciar();
+
+        document.querySelector('#posicao-x').value = '';
+        document.querySelector('#posicao-y').value = '';
+      });
+    });
   </script>
 </body>
 </html>
