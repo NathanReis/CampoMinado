@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Campo Minado</title>
+
+  <style>
+    :root {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Campo Minado</h1>
+
+    <p>Este jogo foi desenvolvido em Javascript e é possível jogar apenas ferramenta de desenvolvimento do navegador.</p>
+
+    <p>Aperte <code>F12</code> ou <code>Ctrl + Shift + I</code> para abri-lá. Caso os atalhos não funcionem, verifique qual o correto para sua máquina e navegador.</p>
+
+    <p>Com a ferramenta de desenvolimento aberta, vá na aba "Console".</p>
+
+    <h2>Comandos</h2>
+
+    <ul>
+      <li>
+        <strong>Abir uma posição no campo:</strong> <br />
+        <code>abrirPosicao(x, y)</code> <br />
+        <code>x</code>: A linha que deseja abrir. <br />
+        <code>y</code>: A coluna que deseja abrir.
+      </li>
+      <li>
+        <strong>Marcar uma possível bomba:</strong> <br />
+        <code>marcarComBandeira(x, y)</code> <br />
+        <code>x</code>: A linha que deseja marcar. <br />
+        <code>y</code>: A coluna que deseja marcar.
+      </li>
+      <li>
+      <strong>Reiniciar:</strong> <br />
+        <code>reiniciar()</code>
+      </li>
+    </ul>
+  </main>
+
+  <script>
+    const SETTINGS = Object.freeze({
+      campo: Object.freeze({
+        tamanhoX: 10,
+        tamanhoY: 10,
+        simbolos: Object.freeze({
+          fechado: '⬜',
+          aberto: '⬛',
+          0: '0️⃣',
+          1: '1️⃣',
+          2: '2️⃣',
+          3: '3️⃣',
+          4: '4️⃣',
+          5: '5️⃣',
+          6: '6️⃣',
+          7: '7️⃣',
+          8: '8️⃣',
+          9: '9️⃣',
+          10: '🔟',
+        }),
+      }),
+      bombas: Object.freeze({
+        quantidade: 10,
+        simbolo: '💣'
+      }),
+      bandeiras: Object.freeze({
+        simbolo: '🚩'
+      }),
+    });
+
+    let campo = [];
+    let posicoesBombas = [];
+    let posicoesBandeiras = [];
+    let posicoesAbertas = [];
+    let ehJogoFinalizado = false;
+    let ehVitoria = null;
+
+    // Recebe as coordenadas com base na indicação do campo, ou seja, os valores
+    // vão de 1 à 10, e não de 0 à 9.
+    function abrirPosicao(usuarioX, usuarioY) {
+      if (ehJogoFinalizado) {
+        return verificarVitoria();
+      };
+
+      let posicao = [(usuarioX - 1), (usuarioY - 1)];
+
+      if (!ehPosicaoNoCampo(posicao)) {
+        return console.log('Posições escolhidas não estão no campo!');
+      }
+
+      if (ehPosicaoAberta(posicao)) {
+        return console.log('Posição já aberta, escolhe uma diferente!');
+      }
+
+      if (ehPosicaoDeBomba(posicao)) {
+        ehJogoFinalizado = true;
+        ehVitoria = false;
+        posicoesAbertas.push(posicao);
+
+        exibirCampo();
+
+        return console.log('Você perdeu! 💥');
+      }
+
+      posicoesAbertas.push(posicao);
+
+      removerPosicaoDeBandeira(posicao);
+
+      if (!ehPosicaoDica(posicao)) {
+        propagarAbertura(posicao);
+      }
+
+      exibirCampo();
+      verificarVitoria();
+    }
+
+    function propagarAbertura(posicaoAberta) {
+      let posicoesEmTorno = [
+        [-1, -1], [-1,  0], [-1, +1], // 1 1 1
+        [ 0, -1],           [ 0, +1], // 1 B 1
+        [+1, -1], [+1,  0], [+1, +1], // 1 1 1
+      ];
+      let [abertaX, abertaY] = posicaoAberta;
+
+      for (let [emTornoX, emTornoY] of posicoesEmTorno) {
+        let posicao = [(abertaX + emTornoX), (abertaY + emTornoY)];
+
+        if (
+          ehPosicaoNoCampo(posicao)
+          && !ehPosicaoAberta(posicao)
+          && !ehPosicaoDeBomba(posicao)
+        ) {
+          posicoesAbertas.push(posicao);
+
+          removerPosicaoDeBandeira(posicao);
+
+          if (!ehPosicaoDica(posicao)) {
+            propagarAbertura(posicao);
+          }
+        }
+      }
+    }
+
+    function removerPosicaoDeBandeira(posicao) {
+      if (ehPosicaoDeBandeira(posicao)) {
+        posicoesBandeiras = posicoesBandeiras.filter((posicaoBandeira) => {
+          return !saoArraysIguais(posicao, posicaoBandeira);
+        });
+      }
+    }
+
+    // Recebe as coordenadas com base na indicação do campo, ou seja, os valores
+    // vão de 1 à 10, e não de 0 à 9.
+    function marcarComBandeira(usuarioX, usuarioY) {
+      if (ehJogoFinalizado) {
+        return verificarVitoria();
+      };
+
+      let posicao = [(usuarioX - 1), (usuarioY - 1)];
+
+      if (!ehPosicaoNoCampo(posicao)) {
+        return console.log('Posições escolhidas não estão no campo!');
+      }
+
+      if (ehPosicaoAberta(posicao)) {
+        return console.log('Posição já aberta, escolhe uma diferente!');
+      }
+
+      if (ehPosicaoDeBandeira(posicao)) {
+        return console.log('Posição já marcada, escolhe uma diferente!');
+      }
+
+      posicoesBandeiras.push(posicao);
+
+      exibirCampo();
+      verificarVitoria();
+    }
+
+    function verificarVitoria() {
+      if (ehJogoFinalizado) {
+        return console.log(`Você ${ehVitoria ? 'venceu! 😄' : 'perdeu! 💥'}`)
+      }
+
+      let totalDePosicoes = SETTINGS.campo.tamanhoX * SETTINGS.campo.tamanhoY;
+      let totalDePosicoesDescobertasParaVitoria = totalDePosicoes - SETTINGS.bombas.quantidade;
+
+      let faltaApenasBombas = posicoesAbertas.length === totalDePosicoesDescobertasParaVitoria;
+
+      if (faltaApenasBombas) {
+        ehJogoFinalizado = true;
+        ehVitoria = true;
+
+        console.log('Você venceu! 😄');
+      }
+    }
+
+    function reiniciar() {
+      campo = [];
+      posicoesBombas = [];
+      posicoesBandeiras = [];
+      posicoesAbertas = [];
+      ehJogoFinalizado = false;
+      ehVitoria = null;
+
+      inicializar();
+    }
+
+    function inicializar() {
+      inicializarCampo();
+      sortearPosicoesDasBombas();
+      colocarBombasNoCampo();
+      colocarDicasNoCampo();
+      exibirCampo();
+    }
+
+    function inicializarCampo() {
+      for (let x = 0; x < SETTINGS.campo.tamanhoX; x++) {
+        campo[x] = [];
+
+        for (let y = 0; y < SETTINGS.campo.tamanhoY; y++) {
+          campo[x][y] = 0;
+        }
+      }
+    }
+
+    function sortearPosicoesDasBombas() {
+      for (let i = 0; i < SETTINGS.bombas.quantidade;) {
+        let possivelPosicao = sortearPosicaoNoCampo();
+
+        if (!ehPosicaoDeBomba(possivelPosicao)) {
+          posicoesBombas[i] = possivelPosicao;
+          i++;
+        }
+      }
+    }
+
+    function colocarBombasNoCampo() {
+      for (let [x, y] of posicoesBombas) {
+        campo[x][y] = SETTINGS.bombas.simbolo;
+      }
+    }
+
+    function colocarDicasNoCampo() {
+      let posicoesDicas = [
+        [-1, -1], [-1,  0], [-1, +1], // 1 1 1
+        [ 0, -1],           [ 0, +1], // 1 B 1
+        [+1, -1], [+1,  0], [+1, +1], // 1 1 1
+      ];
+
+      for (let [bombaX, bombaY] of posicoesBombas) {
+        for (let [dicaX, dicaY] of posicoesDicas) {
+          let x = bombaX + dicaX;
+          let y = bombaY + dicaY;
+
+          if (ehPosicaoNoCampo([x, y]) && !ehPosicaoDeBomba([x, y])) {
+            campo[x][y]++;
+          }
+        }
+      }
+    }
+
+    function exibirCampo() {
+      let desenhoCampo = '';
+
+      for (let y = 0; y <= SETTINGS.campo.tamanhoY; y++) {
+        desenhoCampo += `${SETTINGS.campo.simbolos[y]}|`;
+      }
+
+      desenhoCampo += '\n\r';
+
+      for (let x = 0; x < SETTINGS.campo.tamanhoX; x++) {
+        desenhoCampo += `${SETTINGS.campo.simbolos[(x + 1)]}|`;
+
+        for (let y = 0; y < SETTINGS.campo.tamanhoY; y++) {
+          let posicao = [x, y];
+
+          if (ehPosicaoAberta(posicao)) {
+            if (ehPosicaoDeBomba(posicao)) {
+              desenhoCampo += SETTINGS.bombas.simbolo;
+            }
+            else if (ehPosicaoDica(posicao)) {
+              let dica = campo[x][y];
+
+              desenhoCampo += SETTINGS.campo.simbolos[dica];
+            } else {
+              desenhoCampo += SETTINGS.campo.simbolos.aberto;
+            }
+          } else if (ehPosicaoDeBandeira(posicao)) {
+            desenhoCampo += SETTINGS.bandeiras.simbolo;
+          } else {
+            desenhoCampo += SETTINGS.campo.simbolos.fechado;
+          }
+
+          desenhoCampo += '|';
+        }
+
+        desenhoCampo += '\n\r';
+      }
+
+      console.log(desenhoCampo)
+    }
+
+    function sortearPosicaoNoCampo() {
+      return [
+        Math.floor(Math.random() * SETTINGS.campo.tamanhoX),
+        Math.floor(Math.random() * SETTINGS.campo.tamanhoY)
+      ];
+    }
+
+    function ehPosicaoDeBomba(posicao) {
+      return posicoesBombas.some((posicaoBomba) => {
+        return saoArraysIguais(posicaoBomba, posicao);
+      });
+    }
+
+    function ehPosicaoNoCampo(posicao) {
+      let [x, y] = posicao;
+
+      return ehLinhaNoCampo(x) && ehColunaNoCampo(y);
+    }
+
+    function ehPosicaoAberta(posicao) {
+      return posicoesAbertas.some((posicaoAberta) => {
+        return saoArraysIguais(posicaoAberta, posicao);
+      });
+    }
+
+    function ehPosicaoDica(posicao) {
+      let [x, y] = posicao;
+
+      return (
+        campo[x][y] !== 0
+        && campo[x][y] !== SETTINGS.bombas.simbolo
+        && campo[x][y] !== SETTINGS.bandeiras.simbolo
+      );
+    }
+
+    function ehPosicaoDeBandeira(posicao) {
+      return posicoesBandeiras.some((posicaoBandeira) => {
+        return saoArraysIguais(posicaoBandeira, posicao);
+      });
+    }
+
+    function saoArraysIguais(array1, array2) {
+      return array1.toString() === array2.toString();
+    }
+
+    function ehLinhaNoCampo(x) {
+      return x >= 0 && x < SETTINGS.campo.tamanhoX;
+    }
+
+    function ehColunaNoCampo(y) {
+      return y >= 0 && y < SETTINGS.campo.tamanhoY;
+    }
+
+    inicializar();
+  </script>
+</body>
+</html>
