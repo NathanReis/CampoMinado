@@ -1,0 +1,12 @@
+#abrir-emulador-console {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#emulador-console #fechar-emulador-console {
+  cursor: pointer;
+}
+
+#emulador-console #campo {
+  font-size: 16px;
+}
