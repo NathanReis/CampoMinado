@@ -14,32 +14,32 @@
   <main>
     <h1>Campo Minado</h1>
 
-    <p>Este jogo foi desenvolvido em Javascript e é possível jogar apenas ferramenta de desenvolvimento do navegador.</p>
+    <p>Este jogo foi desenvolvido em Javascript e é possível jogar com a ferramenta de desenvolvimento do navegador ou via interface com um emulador do console.</p>
 
-    <p>Aperte <code>F12</code> ou <code>Ctrl + Shift + I</code> para abri-lá. Caso os atalhos não funcionem, verifique qual o correto para sua máquina e navegador.</p>
+    <p>Aperte <code>F12</code> ou <code>Ctrl + Shift + I</code> para abri a ferramenta de desenvolvimento. Caso os atalhos não funcionem, verifique qual o correto para sua máquina e navegador.</p>
 
     <p>Com a ferramenta de desenvolimento aberta, vá na aba "Console".</p>
 
-    <p>Caso esteja em um dispositivo móvel ou não queira jogar pelo conselo, <span id="abrir-emulador-console">click aqui</span> para jogar pela interface.</p>
+    <p>Caso esteja em um dispositivo móvel ou não queira jogar pelo console, <span id="abrir-emulador-console">click aqui</span> para jogar pela interface.</p>
 
     <h2>Comandos</h2>
 
     <ul>
       <li>
         <strong>Abir uma posição no campo:</strong> <br />
-        <code>abrirPosicao(x, y)</code> <br />
+        <code>MODO_CONSOLE.abrirPosicao(x, y)</code> <br />
         <code>x</code>: A linha que deseja abrir. <br />
         <code>y</code>: A coluna que deseja abrir.
       </li>
       <li>
         <strong>Marcar uma possível bomba:</strong> <br />
-        <code>marcarComBandeira(x, y)</code> <br />
+        <code>MODO_CONSOLE.marcarComBandeira(x, y)</code> <br />
         <code>x</code>: A linha que deseja marcar. <br />
         <code>y</code>: A coluna que deseja marcar.
       </li>
       <li>
       <strong>Reiniciar:</strong> <br />
-        <code>reiniciar()</code>
+        <code>MODO_CONSOLE.reiniciar()</code>
       </li>
     </ul>
   </main>
