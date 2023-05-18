@@ -16,4 +16,4 @@ Derrota
 
 ![vitoria](https://github.com/NathanReis/CampoMinado/blob/main/amostras/Derrota.jpeg)
 
-[Clique aqui](https://nathanreis.github.io/CampoMinado) para ver a versão publicada.
+[Clique aqui](https://nathanreis.github.io/CampoMinado/v1) para ver a versão publicada.
