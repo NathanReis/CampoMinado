@@ -8,6 +8,7 @@
   <title>Campo Minado - v1</title>
 
   <link rel="stylesheet" href="src/styles/main.css" />
+  <link rel="stylesheet" href="src/styles/comandos.css" />
   <link rel="stylesheet" href="src/styles/emuladorConsole.css" />
 </head>
 <body>
@@ -20,67 +21,80 @@
 
     <p>Com a ferramenta de desenvolimento aberta, vá na aba "Console".</p>
 
-    <p>Caso esteja em um dispositivo móvel ou não queira jogar pelo console, <span id="abrir-emulador-console">click aqui</span> para jogar pela interface.</p>
+    <p>Caso esteja em um dispositivo móvel ou não queira jogar pelo console, <a id="abrir-emulador-console" href="javascript:void(0)">click aqui</a> para jogar pela interface.</p>
 
     <h2>Comandos</h2>
 
-    <ul>
+    <ul id="comandos">
       <li>
-        <strong>Abir uma posição no campo:</strong> <br />
-        <code>MODO_CONSOLE.abrirPosicao(x, y)</code> <br />
-        <code>x</code>: A linha que deseja abrir. <br />
-        <code>y</code>: A coluna que deseja abrir.
+        <span class="descricao">Abir uma posição no campo:</span>
+
+        <div class="explicacao">
+          <code>MODO_CONSOLE.abrirPosicao(x, y)</code> <br />
+          <code>x</code>: A linha que deseja abrir. <br />
+          <code>y</code>: A coluna que deseja abrir.
+        </div>
       </li>
       <li>
-        <strong>Marcar uma possível bomba:</strong> <br />
-        <code>MODO_CONSOLE.marcarComBandeira(x, y)</code> <br />
-        <code>x</code>: A linha que deseja marcar. <br />
-        <code>y</code>: A coluna que deseja marcar.
+        <span class="descricao">Marcar uma possível bomba:</span>
+
+        <div class="explicacao">
+          <code>MODO_CONSOLE.marcarComBandeira(x, y)</code> <br />
+          <code>x</code>: A linha que deseja marcar. <br />
+          <code>y</code>: A coluna que deseja marcar.
+        </div>
       </li>
       <li>
-      <strong>Reiniciar:</strong> <br />
-        <code>MODO_CONSOLE.reiniciar()</code>
+        <span class="descricao">Reiniciar:</span>
+
+        <div class="explicacao">
+          <code>MODO_CONSOLE.reiniciar()</code>
+        </div>
       </li>
     </ul>
   </main>
 
   <dialog id="emulador-console">
-    <span id="fechar-emulador-console">❌</span>
+    <a id="fechar-emulador-console" href="javascript:void(0)">❌</a>
 
     <pre id="campo"></pre>
 
-    <p id="emulador-log"></p>
+    <p id="log"></p>
 
-    <form>
-      <div>
-        <label for="posicao-x">X</label>
-        <input
-          id="posicao-x"
-          type="number"
-          step="1"
-          min="1"
-          max="10"
-        />
-      </div>
+    <div id="controles">
+      <form id="formulario-posicao">
+        <fieldset id="inputs-posicao">
+          <div class="input-posicao">
+            <label for="posicao-x">X</label>
+            <input
+              id="posicao-x"
+              type="number"
+              step="1"
+              min="1"
+              max="10"
+            />
+          </div>
 
-      <div>
-        <label for="posicao-y">Y</label>
-        <input
-          id="posicao-y"
-          type="number"
-          step="1"
-          min="1"
-          max="10"
-        />
-      </div>
+          <div class="input-posicao">
+            <label for="posicao-y">Y</label>
+            <input
+              id="posicao-y"
+              type="number"
+              step="1"
+              min="1"
+              max="10"
+            />
+          </div>
+        </fieldset>
 
-      <div>
-        <button id="abrir-posicao" type="button">Abrir Posição</button>
-        <button id="marcar-bomba" type="button">Marcar Bomba</button>
-      </div>
-    </form>
+        <div id="acoes-posicao">
+          <button id="abrir-posicao" type="button">Abrir Posição</button>
+          <button id="marcar-bomba" type="button">Marcar Bomba</button>
+        </div>
+      </form>
 
-    <button id="reiniciar" type="button">Reiniciar</button>
+      <button id="reiniciar" type="button">Reiniciar</button>
+    </div>
   </dialog>
 
   <script src="src/javascripts/settings.js"></script>

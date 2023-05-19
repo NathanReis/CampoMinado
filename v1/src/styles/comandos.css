@@ -1,0 +1,15 @@
+#comandos li {
+  margin: 1rem 0;
+
+  overflow-x: auto;
+}
+
+#comandos .descricao::before {
+  content: '-';
+
+  margin-right: 1rem;
+}
+
+#comandos .explicacao {
+  margin-left: 1rem;
+}

@@ -42,5 +42,5 @@ function exibirCampoEmulador(desenhoCampo) {
 }
 
 function exibirLogEmulador(mensagem) {
-  document.querySelector('#emulador-log').innerHTML = mensagem;
+  document.querySelector('#log').innerHTML = mensagem;
 }

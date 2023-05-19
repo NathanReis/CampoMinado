@@ -1,12 +1,84 @@
-#abrir-emulador-console {
-  text-decoration: underline;
-  cursor: pointer;
+#abrir-emulador-console,
+#abrir-emulador-console:hover {
+  color: black;
+}
+
+#emulador-console {
+  margin: auto;
+  padding-top: 2rem;
+  padding-bottom: 16px;
+
+  border: none;
+  border-radius: 0.5rem;
 }
 
 #emulador-console #fechar-emulador-console {
   cursor: pointer;
+
+  position: absolute;
+  top: 0.25rem;
+  right: 8px;
+
+  text-decoration: none
+}
+
+#emulador-console #fechar-emulador-console:focus-visible {
+  outline: 0;
 }
 
 #emulador-console #campo {
   font-size: 16px;
+
+  overflow-x: auto;
+}
+
+#emulador-console #log {
+  height: 2rem;
+
+  line-height: 1rem;
+  text-align: center;
+  text-indent: 0;
+}
+
+#emulador-console #controles {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0 8px;
+}
+
+#emulador-console #controles #formulario-posicao #inputs-posicao {
+  display: flex;
+  flex-direction: row;
+
+  border: none;
+
+  gap: 16px;
+}
+
+#emulador-console #controles #formulario-posicao #inputs-posicao .input-posicao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 50%;
+}
+
+#emulador-console #controles #formulario-posicao #inputs-posicao input {
+  width: 100%;
+}
+
+#emulador-console #controles #formulario-posicao #acoes-posicao {
+  display: flex;
+  justify-content: space-around;
+
+  margin-top: 8px;
+}
+
+#emulador-console #controles #formulario-posicao #acoes-posicao button {
+  width: 40%;
+}
+
+#emulador-console #controles #reiniciar {
+  margin-top: 8px;
 }
