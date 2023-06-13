@@ -1,0 +1,68 @@
+:root {
+  --altura-campo: 500px;
+  --largura-campo: 500px;
+  --quantidade-linhas: 10;
+  --quantidade-colunas: 10;
+}
+
+#campo {
+  height: var(--altura-campo);
+  width: var(--largura-campo);
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  background-color: rgb(99, 193, 255);
+}
+
+#campo .linha {
+  height: calc(var(--altura-campo) / var(--quantidade-linhas));
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+
+  box-sizing: border-box;
+}
+
+#campo .linha .coluna {
+  height: 100%;
+  width: calc(var(--largura-campo) / var(--quantidade-colunas));
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
+
+#campo .linha .coluna:hover {
+  background-color: rgb(68, 180, 255);
+
+  cursor: pointer;
+}
+
+#campo .linha .coluna::after {
+  content: attr(data-simbolo);
+}
+
+#campo .linha .coluna.aberta,
+#campo .linha .coluna.aberta:hover {
+  background-color: rgb(158, 158, 158);
+
+  cursor: default;
+}
+
+#log {
+  height: 2rem;
+
+  line-height: 1rem;
+  text-align: center;
+  text-indent: 0;
+}

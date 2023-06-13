@@ -1,0 +1,12 @@
+{
+  "name": "campo_minado_v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "yarn browser-sync -w"
+  },
+  "devDependencies": {
+    "browser-sync": "2.29.*"
+  }
+}

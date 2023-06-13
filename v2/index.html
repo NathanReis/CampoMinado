@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Campo Minado - v2</title>
+
+  <link rel="stylesheet" href="./src/styles/main.css" />
+  <link rel="stylesheet" href="./src/styles/campo.css" />
+</head>
+<body>
+  <h1>Campo Minado</h1>
+
+  <p>Este jogo foi desenvolvido em Javascript utilizando a biblioteca <a href="https://stimulus.hotwired.dev/" target="_blank">stimulus</a>.</p>
+
+  <p>Para abrir uma posição basta clicar com o botão esquerdo do mouse, e para marcar com a bandeira basta clicar com o botão direito. Se estiver jogando em um dispositivo móvel, sinto muito mas não é possível marcar com a bandeira, boa sorte 🙃.</p>
+
+  <main data-controller="campo">
+    <div id="campo" data-campo-target="campo">
+    </div>
+
+    <p id="log"></p>
+
+    <div id="controles">
+      <button data-action="click->campo#reiniciar">
+        🔄 Reiniciar
+      </button>
+    </div>
+  </main>
+
+  <script type="module" src="./src/javascript/index.js"></script>
+</body>
+</html>
