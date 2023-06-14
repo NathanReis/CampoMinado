@@ -1,3 +1,4 @@
+import { MENSAGENS } from './mensagens.js';
 import { SETTINGS } from './settings.js';
 
 class Jogo {
@@ -38,7 +39,7 @@ class Jogo {
       this.ehVitoria = false;
       this.posicoesAbertas.push(posicao);
 
-      return exibirLog('Você perdeu! 💥');
+      return exibirLog(MENSAGENS.derrota);
     }
 
     this.posicoesAbertas.push(posicao);
@@ -54,7 +55,7 @@ class Jogo {
 
   verificarVitoria({ exibirLog }) {
     if (this.ehJogoFinalizado) {
-      return exibirLog(`Você ${this.ehVitoria ? 'venceu! 😄' : 'perdeu! 💥'}`)
+      return exibirLog(this.ehVitoria ? MENSAGENS.vitoria : MENSAGENS.derrota)
     }
 
     let totalDePosicoes = SETTINGS.campo.linhas * SETTINGS.campo.colunas;
@@ -66,7 +67,7 @@ class Jogo {
       this.ehJogoFinalizado = true;
       this.ehVitoria = true;
 
-      exibirLog('Você venceu! 😄');
+      exibirLog(MENSAGENS.vitoria);
     }
   }
 

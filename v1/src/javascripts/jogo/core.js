@@ -11,11 +11,11 @@ function abrirPosicao({ posicao, exibirLog, exibirCampo }) {
   };
 
   if (!ehPosicaoNoCampo(posicao)) {
-    return exibirLog('Posições escolhidas não estão no campo!');
+    return exibirLog(MENSAGENS.posicaoForaDoCampo);
   }
 
   if (ehPosicaoAberta(posicao)) {
-    return exibirLog('Posição já aberta, escolhe uma diferente!');
+    return exibirLog(MENSAGENS.posicaoJaAberta);
   }
 
   if (ehPosicaoDeBomba(posicao)) {
@@ -25,7 +25,7 @@ function abrirPosicao({ posicao, exibirLog, exibirCampo }) {
 
     exibirCampo(desenharCampo());
 
-    return exibirLog('Você perdeu! 💥');
+    return exibirLog(MENSAGENS.derrota);
   }
 
   posicoesAbertas.push(posicao);
@@ -81,15 +81,15 @@ function marcarComBandeira({ posicao, exibirLog, exibirCampo }) {
   };
 
   if (!ehPosicaoNoCampo(posicao)) {
-    return exibirLog('Posições escolhidas não estão no campo!');
+    return exibirLog(MENSAGENS.posicaoForaDoCampo);
   }
 
   if (ehPosicaoAberta(posicao)) {
-    return exibirLog('Posição já aberta, escolhe uma diferente!');
+    return exibirLog(MENSAGENS.posicaoJaAberta);
   }
 
   if (ehPosicaoDeBandeira(posicao)) {
-    return exibirLog('Posição já marcada, escolhe uma diferente!');
+    return exibirLog(MENSAGENS.posicaoJaMarcada);
   }
 
   posicoesBandeiras.push(posicao);
@@ -100,7 +100,7 @@ function marcarComBandeira({ posicao, exibirLog, exibirCampo }) {
 
 function verificarVitoria({ exibirLog }) {
   if (ehJogoFinalizado) {
-    return exibirLog(`Você ${ehVitoria ? 'venceu! 😄' : 'perdeu! 💥'}`)
+    return exibirLog(ehVitoria ? MENSAGENS.vitoria : MENSAGENS.derrota)
   }
 
   let totalDePosicoes = SETTINGS.campo.tamanhoX * SETTINGS.campo.tamanhoY;
@@ -112,7 +112,7 @@ function verificarVitoria({ exibirLog }) {
     ehJogoFinalizado = true;
     ehVitoria = true;
 
-    exibirLog('Você venceu! 😄');
+    exibirLog(MENSAGENS.vitoria);
   }
 }
 
